@@ -11,10 +11,12 @@ public class MarketPlace {
                 System.out.println("\n\n   Menu");
                 System.out.println("1. Display list of all users");
                 System.out.println("2. Display list of all products");
-
-
-                System.out.println("5. Exit");
+                System.out.println("3. Buying a product");
+                System.out.println("4. Display list of user products");
+                System.out.println("5. Display list of users that bought product");
+                System.out.println("6. Exit");
                 System.out.print("===============> ");
+
                 int choice = scanner.nextInt();
                 switch (choice){
                     case 1:
@@ -23,18 +25,21 @@ public class MarketPlace {
                     case 2:
                         products.displayListOfAllProducts();
                         break;
+                    case 3:
+                        break;
+                    case 4
+                        flag = false;
+                        break;
                     case 5:
+                        break;
+                    case 6:
                         flag = false;
                         break;
 
                 }
 
             }
-
-
-
-
-    }
+        }
 }
 
 class Products {
