@@ -3,6 +3,8 @@ import java.util.stream.Collectors;
 
 public class MarketPlace {
         static  Map<String, List<String>> historyPurchaseUser = new HashMap<>();
+        static  Map<String, List<String>> historyPurchaseProduct = new HashMap<>();
+
         public static void main(String[] args) {
 
 
@@ -33,41 +35,57 @@ public class MarketPlace {
                         int[] array = users.buyingProduct(products);
                         if (array[0] > -1 && array[1] > -1) {
                             put(historyPurchaseUser, users.returnName(array[0]), products.returnNameProduct(array[1]));
-                            //historyPurchaseUser.put(array[0], array[1]);
-                            int a=1;
-
+                            put(historyPurchaseProduct, products.returnNameProduct(array[1]), users.returnName(array[0]));
                         }
                         break;
                     case 4:
-                        displayListOfUserProducts(products4);
+                        displayListOfUserProducts(users, products);
                         break;
                     case 5:
+                        displayListOfUsersThatBoughtProduct(users, products);
                         break;
                     case 6:
                         flag = false;
                         break;
-
                 }
 
             }
         }
 
-        public static void displayListOfUserProducts (Products products){
+        public static void displayListOfUserProducts (Users users, Products products){
 
             Scanner scanner = new Scanner(System.in);
 
-            System.out.print("Input Id user ==> ");
+            System.out.print("Input user Id ==> ");
             int idU = scanner.nextInt();
             int indexIdUser = products.returnIndex(idU);
             if (indexIdUser < 0){
                 System.out.println("User id - " + idU + " not found");
             } else {
-                historyPurchaseUser.forEach((s, strings) -> {
-                    System.out.print(s + ": ");
-                    System.out.println(strings.stream().collect(Collectors.joining(", ")));
-                });
+                String user = users.returnName(indexIdUser);
+                if (historyPurchaseUser.containsKey(user)) {
+                    System.out.print("\n" + user + " products: ");
+                    System.out.println(historyPurchaseUser.get(user).stream().collect(Collectors.joining(", ")));
+                }
             }
+        }
 
+        public static void displayListOfUsersThatBoughtProduct (Users users, Products products) {
+
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.print("Input product Id ==> ");
+            int idP = scanner.nextInt();
+            int indexIdProduct = users.returnIndex(idP);
+            if (indexIdProduct < 0){
+                System.out.println("Product id - " + idP + " not found");
+            } else {
+                String product = products.returnNameProduct(indexIdProduct);
+                if (historyPurchaseProduct.containsKey(product)) {
+                    System.out.print("\n" + product + " was bought by: ");
+                    System.out.println(historyPurchaseProduct.get(product).stream().collect(Collectors.joining(", ")));
+                }
+            }
         }
 
     private static <KEY, VALUE> void put(Map<KEY, List<VALUE>> map, KEY key, VALUE value) {
@@ -124,7 +142,7 @@ class Users {
         int[] result = {0,0};
         Scanner scanner =new Scanner(System.in);
 
-        System.out.print("Input Id user ==> ");
+        System.out.print("Input user Id ==> ");
         int idU = scanner.nextInt();
         int indexIdUser = returnIndex(idU);
         if (indexIdUser < 0){
@@ -135,7 +153,7 @@ class Users {
             result[0] = indexIdUser;
         }
 
-        System.out.print("Input Id product ==> ");
+        System.out.print("Input product Id ==> ");
         int idP = scanner.nextInt();
         int indexIdProduct = products.returnIndex(idP);
 
@@ -150,9 +168,9 @@ class Users {
 
         float price = products.ReturnPrice(indexIdProduct);
         if (price > amountOfMoney[indexIdUser]) {
-            System.out.println("User " + nameFirst[indexIdUser] +" does not have enough money");
+            System.out.println("\nUser " + nameFirst[indexIdUser] +" does not have enough money");
         } else {
-            System.out.println("User " + nameFirst[indexIdUser] + " to buy " + products.returnNameProduct(indexIdProduct));
+            System.out.println("\nUser " + nameFirst[indexIdUser] + " bought " + products.returnNameProduct(indexIdProduct));
             amountOfMoney[indexIdUser] -= price;
         }
         return result;
